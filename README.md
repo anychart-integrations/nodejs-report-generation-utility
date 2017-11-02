@@ -5,11 +5,11 @@ This example shows how to generate HTML reports with charts using AnyChart chart
 ## Running
 Clone this repository:
 ```
-$ git clone git@github.com:anychart-integrations/nodejs-report-generation-utilily.git
+$ git clone git@github.com:anychart-integrations/nodejs-report-generation-utility.git
 ```
 Go to the example folder:
 ```
-$ cd ./nodejs-report-generation-utilily
+$ cd ./nodejs-report-generation-utility
 ```
 To run an example you have to install dependencies. To do so run:
 ```
