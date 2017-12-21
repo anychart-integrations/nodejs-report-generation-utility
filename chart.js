@@ -1,59 +1,141 @@
-  // generete data
-  var rawData = [];
-  for (x = -180; x < 180; x++) {
-    rawData.push([x, -12.6 * (1 - Math.cos(x * 1.14 / 180)), -12.6 * (1 - Math.cos(x * 2.14 / 180)), -12.6 * (1 - Math.cos(x * 3.14 / 180))]);
+anychart.onDocumentReady(function() {
+  var colors = ['#0072A5', '#3BBA7B', '#FFCD61', '#FA5446', '#7D58BD', '#29D8D5'];
+
+  var generateData = function(chart) {
+    var data = [];
+    var features = chart.geoData()['features'];
+    for (var i = 0, len = features.length; i < len; i++) {
+      var feature = features[i];
+      if (feature['properties']) {
+        var id = feature['properties'][chart.geoIdField()];
+
+        switch (id) {
+          case 'US.WA':
+          case 'US.OR':
+          case 'US.CA':
+          case 'US.NV':
+          case 'US.AZ':
+          case 'US.AK':
+          case 'US.HI':
+            value = 'West'
+            break;
+          case 'US.ID':
+          case 'US.MT':
+          case 'US.ND':
+          case 'US.SD':
+          case 'US.NE':
+          case 'US.KS':
+          case 'US.OK':
+          case 'US.TX':
+          case 'US.NM':
+          case 'US.CO':
+          case 'US.UT':
+          case 'US.WY':
+            value = 'Midwest'
+            break;
+          case 'US.AR':
+          case 'US.TN':
+          case 'US.NC':
+          case 'US.SC':
+          case 'US.GA':
+          case 'US.LA':
+          case 'US.MS':
+          case 'US.AL':
+          case 'US.FL':
+            value = 'Southeast'
+            break;
+          case 'US.MN':
+          case 'US.WI':
+          case 'US.MI':
+          case 'US.IA':
+          case 'US.MO':
+          case 'US.IL':
+          case 'US.IN':
+          case 'US.KY':
+          case 'US.OH':
+            value = 'Great Lakes'
+            break;
+          case 'US.PA':
+          case 'US.WV':
+          case 'US.VA':
+          case 'US.MD':
+          case 'US.DE':
+          case 'US.NJ':
+            value = 'Midatlantic'
+            break;
+          default:
+            value = 'Northeast'
+        }
+
+        data.push({'id': id, 'value': value});
+      }
+    }
+    return data;
   };
 
-  // create a data set
-  var series = anychart.data.mapAsTable(rawData, "area");
+  var map = anychart.map();
+  map.geoData('anychart.maps.united_states_of_america');
+  map.padding(0).margin(0);
 
-  // create polar chart
-  chart = anychart.polar();
-  chart.bounds(0, 0, 600, 500);
+  map.background().fill(null);
 
-  // add series
-  chart.defaultSeriesType("area");
-  chart.addSeries(series[0], series[1], series[2]);
+  map.label()
+      .enabled(true)
+      .text('SALES')
+      .adjustFontSize(true, false)
+      .maxFontSize(40)
+      .minFontSize(14)
+      .width('40%')
+      .fontColor('black')
+      .position('center')
+      .anchor('center')
+      .hAlign('center')
+      .offsetY('-40%');
 
-  // set series names
-  chart.getSeries(0).name("SMM58");
-  chart.getSeries(1).name("NTT1A");
-  chart.getSeries(2).name("sE4400a IV");
+  map.label(1)
+      .enabled(true)
+      .text('$212,600,000')
+      .adjustFontSize(true, false)
+      .maxFontSize(60)
+      .width('80%')
+      .fontColor('black')
+      .position('center')
+      .anchor('center')
+      .hAlign('center')
+      .offsetY('40%');
 
-  // set strokes
-  chart.getSeries(0).stroke("SMM58");
-  chart.getSeries(1).name("NTT1A");
-  chart.getSeries(2).name("sE4400a IV");
+  var choropleth = map.choropleth(generateData(map));
+  choropleth.stroke('1.5 #fff');
 
-  // set chart yScale settings
-  chart.yScale().ticks().interval(5);
-  chart.yScale().minimum(-25);
-  chart.yScale().maximum(0);
-  chart.startAngle(180);
+  var ranges = [
+    {equal: "Northeast", color: colors[0]},
+    {equal: "Midatlantic", color: colors[1]},
+    {equal: "Southeast", color: colors[2]},
+    {equal: "Midwest", color: colors[3]},
+    {equal: "West", color: colors[4]},
+    {equal: "Great Lakes", color: colors[5]}
+  ];
 
-  // set chart xScale settings
-  chart.xScale().minimum(-180);
-  chart.xScale().maximum(180);
-  chart.xScale().ticks().interval(30);
+  var colorScale = anychart.scales.ordinalColor(ranges);
+  choropleth.colorScale(colorScale);
 
-  // set xAxis formatting settings
-  chart.xAxis().labels().textFormatter(function() {
-    return Math.abs(this['value']) + '°';
-  });
+  var data = [
+    {x: "Northeast", value: 50},
+    {x: "Midatlantic", value: 80},
+    {x: "Southeast", value: 50},
+    {x: "Midwest", value: 30},
+    {x: "West", value: 45},
+    {x: "Great Lakes", value: 40}
+  ];
 
-  var grid = chart.grid(0);
-  // color odd and even rows
-  grid.evenFill("white 0.9");
-  grid.oddFill("lightgray 0.3");
-  // set layout type
-  grid.layout("circuit");
-
-  // disable chart title
-  chart.title("Microphones Sensitivity Polar Pattern");
-  chart.legend(true);
-  chart.legend().position("bottom");
-
-  // set container id for the chart
-  chart.container('container');
-  // initiate chart drawing
-  chart.draw();
+  var pie = anychart.pie(data);
+  pie.palette().items(colors);
+  pie.stroke('2 #fff')
+  pie.labels(false);
+  pie.legend()
+      .position('right')
+      .itemsLayout('vertical');
+  pie.innerRadius('85%');
+  pie.center().content(map);
+  pie.container('container').draw();
+});
