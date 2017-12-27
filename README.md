@@ -34,7 +34,6 @@ And to run with defaults you should just exec index.js file with nodejs.
 ## Options
 ```
  -i, --input [value] - path to input data file with a chart, a stage or an svg. Default: chart.js.
- -f, --format [value] - format (type) of input data. Possible values: svg, xml, javascript, json. Default: javascript.
  -o, --output [value] - path to output directory for reports. Default: reports
  -n, --name [value] - name of a report file. Default: report.html
 ```
