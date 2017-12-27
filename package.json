@@ -1,10 +1,10 @@
 {
-  "name": "nodejs-report-generation-utilily",
+  "name": "nodejs-report-generation-utility",
   "title": "NodeJS report generation utility",
   "description": "This example shows how to generate reports with AnyChart charts and NodeJS.",
   "main": "./index.js",
-  "version": "1.1.2",
-  "homepage": "https://github.com/anychart-integrations/nodejs-report-generation-utilily",
+  "version": "1.1.3",
+  "homepage": "https://github.com/anychart-integrations/nodejs-report-generation-utility",
   "license": "Apache-2.0",
   "keywords": [
     "utilily",
@@ -14,7 +14,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/anychart-integrations/nodejs-report-generation-utilily"
+    "url": "https://github.com/anychart-integrations/nodejs-report-generation-utility"
   },
   "dependencies": {
     "commander": "^2.9.0",
