@@ -1,20 +1,13 @@
 #!/usr/bin/env node
 
 var fs = require('fs');
-var jsdom = require('jsdom').jsdom;
+var path = require('path');
 var program = require('commander');
-
-
-var document = jsdom('<body><div id="container"></div></body>');
-var window = document.defaultView;
-
-var anychart = require('anychart')(window);
-var anychart_nodejs = require('anychart-nodejs')(anychart);
+var anychart_nodejs = require('anychart-nodejs');
 
 program
     .version('0.0.1')
     .option('-i, --input [value]', 'path to input data file with chart, stage or svg', 'chart.js')
-    .option('-f, --format [value]', 'format (type) of input data. Possible values: svg, xml, javascript, json.', 'javascript')
     .option('-o, --output [value]', 'path to output directory for reports.', 'reports')
     .option('-n, --name [value]', 'name of report.', 'report.html');
 
@@ -23,7 +16,7 @@ program.parse(process.argv);
 
 fs.readFile(program.input, 'utf8', function(err, data) {
   if (err) {
-    console.log(err.message);
+    console.log(err);
   } else {
     var isExistOutputReportDir = fs.existsSync(program.output);
     if (!isExistOutputReportDir) {
@@ -32,9 +25,7 @@ fs.readFile(program.input, 'utf8', function(err, data) {
 
     //export parameters
     var params = {
-      type: 'png',
-      dataType: program.format,
-      document: document,
+      outputType: 'png',
       resources: [
         'https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.15/proj4.js',
         'https://cdn.anychart.com/geodata/1.2.0/countries/united_states_of_america/united_states_of_america.js'
@@ -47,17 +38,20 @@ fs.readFile(program.input, 'utf8', function(err, data) {
 
       templateFile = templateFile.replace('{{chart}}', '<img class="img-responsive" src="data:image/png;base64,' + base64Data + '">');
 
-      fs.writeFile(program.output + '/' + program.name, templateFile, function(err) {
+      var fileName = program.output + '/' + program.name;
+      var dirName = path.dirname(fileName);
+      if (!fs.existsSync(dirName))
+        fs.mkdirSync(dirName);
+
+      fs.writeFile(fileName, templateFile, function(err) {
         if (err) {
-          console.log(err.message);
+          console.log(err);
         } else {
-          console.log('Written to ' + program.output + '/' + program.name + ' file');
+          console.log('Written to ' + fileName + ' file');
         }
-        process.exit(0);
       });
     }, function(err) {
-      console.log(err.message);
-      process.exit(0);
+      console.log(err);
     });
   }
 });

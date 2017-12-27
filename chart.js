@@ -130,7 +130,7 @@ anychart.onDocumentReady(function() {
 
   var pie = anychart.pie(data);
   pie.palette().items(colors);
-  pie.stroke('2 #fff')
+  pie.stroke('2 #fff');
   pie.labels(false);
   pie.legend()
       .position('right')
