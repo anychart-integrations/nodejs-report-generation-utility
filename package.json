@@ -3,7 +3,7 @@
   "title": "NodeJS report generation utility",
   "description": "This example shows how to generate reports with AnyChart charts and NodeJS.",
   "main": "./index.js",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "homepage": "https://github.com/anychart-integrations/nodejs-report-generation-utilily",
   "license": "Apache-2.0",
   "keywords": [
